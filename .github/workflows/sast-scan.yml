@@ -1,0 +1,35 @@
+name: SAST Security Scan
+'on':
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  bearer-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - id: checkout-code
+      name: Checkout code
+      uses: actions/checkout@v3
+    - id: run-bearer-scan
+      name: Run Bearer SAST scan
+      run: chmod +x .github/workflows/run-bearer.sh && .github/workflows/run-bearer.sh
+    - id: post-scan-results
+      name: Post scan results as PR comment
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      env:
+        REPORT_FILE: ${{ env.REPORT_FILE }}
+      with:
+        script: "\nconst fs = require('fs');\nconst htmlReportContent = fs.readFileSync(process.env.REPORT_FILE,\
+          \ 'utf8');\n\nconst comment = `\n## SAST Security Scan Results\n\nThe Bearer\
+          \ security scan has completed. Please review the results:\n\n<details>\n\
+          <summary>View Full HTML Report</summary>\n\n\n\\`\\`\\`html\n${htmlReportContent}\n\
+          \\`\\`\\`\n\n</details>\n`;\n\nawait github.rest.issues.createComment({\n\
+          \    issue_number: context.issue.number,\n    owner: context.repo.owner,\n\
+          \    repo: context.repo.repo,\n    body: comment\n});\n"
+    - name: Exit with scan status
+      if: always()
+      run: exit ${{ env.EXIT_CODE }}
