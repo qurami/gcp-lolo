@@ -11,11 +11,11 @@ from io import StringIO
 
 def get_gcp_logger(log_name):
     gcp_credentials_path = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
-    gcp_credentials_json = os.environ.get('GCP_CREDENTIALS')
+    gcp_credentials_json = os.environ.get('GCP_CREDENTIALS_JSON')
 
     if not gcp_credentials_path and not gcp_credentials_json:
         raise ValueError(
-            "Neither GOOGLE_APPLICATION_CREDENTIALS nor GCP_CREDENTIALS environment variable is set")
+            "Neither GOOGLE_APPLICATION_CREDENTIALS nor GCP_CREDENTIALS_JSON environment variable is set")
 
     try:
         if gcp_credentials_json:
