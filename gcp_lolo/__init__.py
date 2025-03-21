@@ -1,8 +1,8 @@
-from .logger import get_gcp_logger, setup_gcp_logging
+from .logger import setup_gcp_logging, GCPLoggingHandler
 
 __all__ = [
-    'get_gcp_logger',
-    'setup_gcp_logging'
+    'setup_gcp_logging',
+    'GCPLoggingHandler',
 ]
 
-__version__ = '1.0.2'
+__version__ = '2.0.0'
