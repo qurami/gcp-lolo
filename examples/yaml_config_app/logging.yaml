@@ -1,0 +1,13 @@
+version: 1
+disable_existing_loggers: false
+handlers:
+  gcp_handler:
+    class: gcp_lolo.GCPLoggingHandler
+    level: INFO
+    name: my-test-app
+    gcp_credentials_path: "./gcp_credentials.json"
+    # gcp_credentials_json: "insert credentials JSON here" # alternative to gcp_credentials_path
+loggers:
+  root:
+    level: INFO
+    handlers: [gcp_handler]
