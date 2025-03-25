@@ -1,5 +1,9 @@
 # gcp-lolo
 
+<p align="center">
+  <img width="250" src="logo.png">
+</p>
+
 **GCP** Cloud **Lo**gging Python **lo**gger
 
 The idea behind this package is to provide the simplest way to log messages to Google Cloud Logging, without having to worry about the details of setting up the Google Cloud Logging client and/or affecting the current application structure.
