@@ -117,6 +117,24 @@ class GCPTextIOWrapper:
         self.buffer.truncate(0)
         self.buffer.seek(0)
 
+    def fileno(self):
+        return -1
+
+    def isatty(self):
+        return False
+
+    def close(self):
+        self.flush()
+
+    def readable(self):
+        return False
+
+    def writable(self):
+        return True
+
+    def seekable(self):
+        return False
+
     def __getattr__(self, attr):
         return getattr(self.logger, attr)
 
