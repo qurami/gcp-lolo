@@ -10,6 +10,7 @@ from google.cloud.logging_v2.handlers import CloudLoggingHandler
 from google.cloud.logging_v2.resource import Resource
 from io import StringIO
 from typing import Optional
+import tempfile
 
 GOOGLE_APPLICATION_CREDENTIALS_ENV_VAR_NAME = "GOOGLE_APPLICATION_CREDENTIALS"
 GCP_CREDENTIALS_JSON_ENV_VAR_NAME = "GCP_CREDENTIALS_JSON"
@@ -90,9 +91,11 @@ class GCPTextIOWrapper:
     def __init__(self, logger):
         self.logger = logger
         self.buffer = StringIO()
+        self._temp_file = tempfile.TemporaryFile(mode='w+')
 
     def write(self, message):
         self.buffer.write(message)
+        self._temp_file.write(message)
         if '\n' in message:
             self.flush()
 
@@ -116,15 +119,17 @@ class GCPTextIOWrapper:
             self.logger.handle(record)
         self.buffer.truncate(0)
         self.buffer.seek(0)
+        self._temp_file.flush()
 
     def fileno(self):
-        return -1
+        return self._temp_file.fileno()
 
     def isatty(self):
         return False
 
     def close(self):
         self.flush()
+        self._temp_file.close()
 
     def readable(self):
         return False
